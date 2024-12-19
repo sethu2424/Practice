@@ -1,0 +1,52 @@
+{
+    "s3_push": {
+        "*": {
+            "prefix_vs_destination": {
+                "Log_": "${destination_path_log}"
+            },
+            "iam_role": "${destination_iam_role_arn_log}"
+        }
+    },
+    "custom_s3_push": [
+        {
+            "source": [
+                "DAR_.*"
+            ],
+            "destination": [
+                {
+                    "path": "${destination_path_openairlines}",
+                    "preprocess": [
+                        {
+                            "action": "zip",
+                            "file_extension": "zip"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "source": [
+                "DAR_HB-.*",
+                "DAR_OE-IJV_.*",
+                "DAR_OE-IJS_.*",
+                "DAR_OE-IJX_.*",
+                "DAR_OE-IJU_.*"
+            ],
+            "destination": [
+                {
+                    "path": "${destination_path_safran}"
+                }
+            ]
+        }
+    ],
+    "file_arrival_monitor": {
+        "threshold_time_second": "${file_arrival_threshold_time_second}",
+        "alert": {
+            "sns_topic_arn": [
+                "${sns_arn}"
+            ],
+            "subject": "easyJet/Collins Ground FOMAX File Transfer Outage (Flight Data Monitoring)",
+            "message": "Hello,\n\neasyJet automated Amazon Web Service monitoring has detected a fault with the transfer of data between the easyJet Ground FOMAX environment hosted by Collins Aerospace and easyJet’s AWS S3 bucket used to receive all Flight Data Monitoring (FDM) data.\n\nNo FDM data (QAR, DAR, REP, LOG files) has been received from the Collins hosted Ground FOMAX environment for any aircraft for 12 hours counting from <<last_file_timestamp>> which requires immediate investigation.\n\nOPS_HD@arinc.com Please can you raise an outage ticket and investigate this outage immediately, in accordance with the service level agreement, and provide updates to all the easyJet email distribution lists copied in this email.\n\nThis is an urgent operational issue that needs immediate attention to restore normal service as quickly as possible.\n\nRegards\n\neasyJet IT \n\nTel: +44 (0)1582 525247"
+        }
+    }
+}
