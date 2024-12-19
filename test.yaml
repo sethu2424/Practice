@@ -1,1 +1,7 @@
 aws ssm send-command --instance-ids" i-0b7265913dc693378" --document-name "AWS-RunShellScript" --comment "Start SSM Agent" --parameters 'commands=["sudo systemctl start amazon-ssm-agent"]'
+aws ssm send-command \
+    --instance-ids "i-0b7265913dc693378" \
+    --document-name "AWS-RunShellScript" \
+    --comment "Start SSM Agent" \
+    --parameters 'commands=["sudo systemctl start amazon-ssm-agent"]'
+    
